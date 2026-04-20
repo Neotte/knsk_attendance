@@ -100,6 +100,13 @@ const DEFAULT_STATE = {
     saveStatus.textContent = message;
     saveStatus.style.color = tone === 'ok' ? 'var(--success)' : tone === 'error' ? '#fca5a5' : 'var(--text)';
   }
+
+function renderAll() {
+  renderDate();
+  headingInput.value = state.heading || '';
+  renderMembers();
+  renderResult();
+}
   
   function showNotice(message) {
     storageNotice.hidden = false;
@@ -143,14 +150,18 @@ const DEFAULT_STATE = {
     };
   }
   
-  async function saveRemote() {
-    const response = await fetch('/api/state', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state)
-    });
-    if (!response.ok) throw new Error('원격 저장 실패');
+async function saveRemote() {
+  const response = await fetch('/api/state', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(state)
+  });
+
+  const text = await response.text();
+  if (!response.ok) {
+    throw new Error(`원격 저장 실패: ${response.status} ${text}`);
   }
+}
   
   function queueSave() {
     setSaveStatus(useRemoteStorage ? '저장 중…' : '이 기기에서 저장 중…');
