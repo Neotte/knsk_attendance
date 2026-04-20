@@ -1,7 +1,3 @@
-// Vercel Function: 공용 영구 저장용 API
-// 필요 패키지: npm i @vercel/blob
-// 필요 환경변수: BLOB_READ_WRITE_TOKEN
-
 import { head, put } from '@vercel/blob';
 
 const BLOB_PATH = 'kendo-attendance/state.json';
@@ -21,7 +17,10 @@ const DEFAULT_STATE = {
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store'
+    }
   });
 }
 
@@ -47,38 +46,37 @@ async function getBlobUrl() {
   }
 }
 
-export default async function handler(req) {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return json({ error: 'BLOB_READ_WRITE_TOKEN not configured' }, 500);
-  }
+export async function GET() {
+  try {
+    const url = await getBlobUrl();
+    if (!url) return json(DEFAULT_STATE);
 
-  if (req.method === 'GET') {
-    try {
-      const url = await getBlobUrl();
-      if (!url) return json(DEFAULT_STATE);
-      const response = await fetch(url, { cache: 'no-store' });
-      const data = await response.json();
-      return json(normalizeState(data));
-    } catch (error) {
-      return json({ error: 'failed_to_read_state', detail: String(error) }, 500);
+    const response = await fetch(url, { cache: 'no-store' });
+    const data = await response.json();
+    return json(normalizeState(data));
+  } catch (error) {
+    return json({ error: 'failed_to_read_state', detail: String(error) }, 500);
+  }
+}
+
+export async function POST(request) {
+  try {
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      return json({ error: 'BLOB_READ_WRITE_TOKEN not configured' }, 500);
     }
-  }
 
-  if (req.method === 'POST') {
-    try {
-      const payload = await req.json();
-      const state = normalizeState(payload);
-      await put(BLOB_PATH, JSON.stringify(state, null, 2), {
-        access: 'public',
-        allowOverwrite: true,
-        contentType: 'application/json; charset=utf-8',
-        addRandomSuffix: false
-      });
-      return json({ ok: true, state });
-    } catch (error) {
-      return json({ error: 'failed_to_write_state', detail: String(error) }, 500);
-    }
-  }
+    const payload = await request.json();
+    const state = normalizeState(payload);
 
-  return json({ error: 'method_not_allowed' }, 405);
+    const blob = await put(BLOB_PATH, JSON.stringify(state, null, 2), {
+      access: 'public',
+      allowOverwrite: true,
+      contentType: 'application/json; charset=utf-8',
+      addRandomSuffix: false
+    });
+
+    return json({ ok: true, pathname: blob.pathname, url: blob.url, state });
+  } catch (error) {
+    return json({ error: 'failed_to_write_state', detail: String(error) }, 500);
+  }
 }
