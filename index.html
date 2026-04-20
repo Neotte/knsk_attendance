@@ -17,7 +17,7 @@
         <div class="hero__topline">KST 기준 출석 관리</div>
         <h1>검도관 출석부</h1>
         <p class="hero__desc">
-          체크한 인원을 즉시 복사용 텍스트로 만들고, 인원 목록과 메모를 누구나 추가·수정할 수 있는 모바일 중심 원페이지입니다.
+          출석을 체크하고, 인원 명단을 추가·수정할 수 있는 강남성균 아침반 전용 출석부.
         </p>
         <div class="hero__meta">
           <div>
@@ -26,7 +26,7 @@
           </div>
           <div>
             <span class="meta-label">저장 상태</span>
-            <strong id="saveStatus">초기화 중…</strong>
+            <strong id="saveStatus">명단 저장 중</strong>
           </div>
         </div>
         <div class="notice" id="storageNotice" hidden></div>
@@ -78,23 +78,6 @@
           <button type="button" class="btn btn--primary" id="copyBtn">복사하기</button>
           <button type="button" class="btn btn--ghost" id="rebuildBtn">텍스트 새로 생성</button>
         </div>
-      </section>
-
-      <section class="card section" aria-labelledby="memoTitle">
-        <div class="section__head">
-          <div>
-            <p class="section__eyebrow">SECTION 3</p>
-            <h2 id="memoTitle">메모</h2>
-          </div>
-        </div>
-
-        <label class="sr-only" for="memoInput">메모</label>
-        <textarea
-          id="memoInput"
-          class="memo-box"
-          placeholder="공용 메모를 입력하세요. 예: 오늘 승급심사 준비, 대나무 죽도 점검"
-        ></textarea>
-        <p class="helper-text">메모는 페이지 최하단 공용 영역에 저장됩니다.</p>
       </section>
     </main>
 
