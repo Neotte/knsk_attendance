@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111827" />
+    <title>검도관 출석부</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell"></div>
+    <main class="app">
+      <header class="hero card">
+        <div class="hero__topline">KST 기준 출석 관리</div>
+        <h1>검도관 출석부</h1>
+        <p class="hero__desc">
+          체크한 인원을 즉시 복사용 텍스트로 만들고, 인원 목록과 메모를 누구나 추가·수정할 수 있는 모바일 중심 원페이지입니다.
+        </p>
+        <div class="hero__meta">
+          <div>
+            <span class="meta-label">오늘 날짜</span>
+            <strong id="currentDate">불러오는 중…</strong>
+          </div>
+          <div>
+            <span class="meta-label">저장 상태</span>
+            <strong id="saveStatus">초기화 중…</strong>
+          </div>
+        </div>
+        <div class="notice" id="storageNotice" hidden></div>
+      </header>
+
+      <section class="card section" aria-labelledby="checklistTitle">
+        <div class="section__head">
+          <div>
+            <p class="section__eyebrow">SECTION 1</p>
+            <h2 id="checklistTitle">체크리스트</h2>
+          </div>
+          <div class="section__summary">
+            <span>출석 <strong id="presentCount">0</strong>명</span>
+            <span>전체 <strong id="totalCount">0</strong>명</span>
+          </div>
+        </div>
+
+        <form id="addMemberForm" class="add-form" autocomplete="off">
+          <label class="sr-only" for="newMemberName">새 인원 이름</label>
+          <input id="newMemberName" name="newMemberName" type="text" maxlength="20" placeholder="새 인원 이름 추가" />
+          <button type="submit" class="btn btn--primary">인원 추가</button>
+        </form>
+
+        <div class="toolbar">
+          <button type="button" class="btn btn--ghost" id="checkAllBtn">전체 출석</button>
+          <button type="button" class="btn btn--ghost" id="uncheckAllBtn">전체 해제</button>
+          <button type="button" class="btn btn--ghost" id="sortBtn">이름순 정렬</button>
+        </div>
+
+        <ul id="memberList" class="member-list" aria-live="polite"></ul>
+      </section>
+
+      <section class="card section" aria-labelledby="resultTitle">
+        <div class="section__head">
+          <div>
+            <p class="section__eyebrow">SECTION 2</p>
+            <h2 id="resultTitle">최종 텍스트</h2>
+          </div>
+        </div>
+
+        <label class="result-options">
+          <span>제목 문구</span>
+          <input id="headingInput" type="text" maxlength="40" placeholder="예: 강남성균 검도관 아침반 출석" />
+        </label>
+
+        <textarea id="resultText" class="result-box" readonly spellcheck="false"></textarea>
+
+        <div class="toolbar toolbar--sticky-mobile">
+          <button type="button" class="btn btn--primary" id="copyBtn">복사하기</button>
+          <button type="button" class="btn btn--ghost" id="rebuildBtn">텍스트 새로 생성</button>
+        </div>
+      </section>
+
+      <section class="card section" aria-labelledby="memoTitle">
+        <div class="section__head">
+          <div>
+            <p class="section__eyebrow">SECTION 3</p>
+            <h2 id="memoTitle">메모</h2>
+          </div>
+        </div>
+
+        <label class="sr-only" for="memoInput">메모</label>
+        <textarea
+          id="memoInput"
+          class="memo-box"
+          placeholder="공용 메모를 입력하세요. 예: 오늘 승급심사 준비, 대나무 죽도 점검"
+        ></textarea>
+        <p class="helper-text">메모는 페이지 최하단 공용 영역에 저장됩니다.</p>
+      </section>
+    </main>
+
+    <template id="memberItemTemplate">
+      <li class="member-item">
+        <label class="member-check">
+          <input type="checkbox" class="member-checkbox" />
+          <span class="member-check__box" aria-hidden="true"></span>
+          <span class="member-name"></span>
+        </label>
+        <button type="button" class="icon-btn delete-btn" aria-label="인원 삭제">삭제</button>
+      </li>
+    </template>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>

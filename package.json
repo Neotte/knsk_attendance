@@ -1,0 +1,14 @@
+{
+    "name": "kendo-attendance",
+    "version": "1.0.0",
+    "private": true,
+    "description": "검도관 출석부 - 배포용 원페이지",
+    "type": "module",
+    "scripts": {
+      "dev": "vercel dev",
+      "deploy": "vercel"
+    },
+    "dependencies": {
+      "@vercel/blob": "^1.1.1"
+    }
+  }
