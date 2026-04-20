@@ -14,7 +14,6 @@ const DEFAULT_STATE = {
   const memberList = $('#memberList');
   const template = $('#memberItemTemplate');
   const resultText = $('#resultText');
-  const memoInput = $('#memoInput');
   const headingInput = $('#headingInput');
   const saveStatus = $('#saveStatus');
   const storageNotice = $('#storageNotice');
@@ -95,14 +94,6 @@ const DEFAULT_STATE = {
   
   function renderResult() {
     resultText.value = buildResultText();
-  }
-  
-  function renderAll() {
-    renderDate();
-    headingInput.value = state.heading || '';
-    memoInput.value = state.memo || '';
-    renderMembers();
-    renderResult();
   }
   
   function setSaveStatus(message, tone = 'default') {
@@ -271,11 +262,6 @@ const DEFAULT_STATE = {
   headingInput.addEventListener('input', (event) => {
     state.heading = event.target.value;
     renderResult();
-    queueSave();
-  });
-  
-  memoInput.addEventListener('input', (event) => {
-    state.memo = event.target.value;
     queueSave();
   });
   
